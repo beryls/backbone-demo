@@ -16,13 +16,13 @@ var FormView = Backbone.View.extend(
 		 * @type String
 		 */
 		tagName: 'div',
-	
+
 		/**
 		 * CSS class name of the container element
 		 * @type String
 		 */
 		className: 'commentform',
-		
+
 		/**
 		 * The map of delegated event handlers
 		 * @type Object
@@ -31,7 +31,7 @@ var FormView = Backbone.View.extend(
 			'click .submit': 'submit',
 			'click .cancel': 'cancel'
 		},
-		
+
 		/**
 		 * View init method, subscribing to model events
 		 */
@@ -39,7 +39,7 @@ var FormView = Backbone.View.extend(
 			this.model.on('change', this.updateFields, this);
 			this.model.on('destroy', this.remove, this);
 		},
-		
+
 		/**
 		 * Render form element from a template using Mustache
 		 * @returns {FormView} Returns the view instance itself, to allow chaining view commands.
@@ -53,7 +53,7 @@ var FormView = Backbone.View.extend(
 			this.$el.html(Mustache.to_html(template, template_vars));
 			return this;
 		},
-	
+
 		/**
 		 * Submit button click handler
 		 * Sets new values from form on model, triggers a success event and cleans up the form
@@ -65,21 +65,21 @@ var FormView = Backbone.View.extend(
 				author: this.$el.find('.author').val(),
 				text: this.$el.find('.text').val()
 			});
-			
+
 			// set an id if model was a new instance
 			// note: this is usually done automatically when items are stored in an API
 			if (this.model.isNew()) {
 				this.model.id = Math.floor(Math.random() * 1000);
 			}
-			
+
 			// trigger the 'success' event on form, with the returned model as the only parameter
 			this.trigger('success', this.model);
-			
+
 			// remove form view from DOM and memory
 			this.remove();
 			return false;
 		},
-		
+
 		/**
 		* Cancel button click handler
 		* Cleans up form view from DOM
@@ -87,10 +87,21 @@ var FormView = Backbone.View.extend(
 		*/
 		cancel: function () {
 			// clean up form
-			this.remove();
+			if (this.$el.find('.text').val() !== "") {
+				var c = confirm("Are you sure you want to lose these changes?")
+				if (c === true) {
+					debugger;
+					this.remove();
+				}
+				else {
+				}
+			}
+			else {
+				this.remove();
+			}
 			return false;
 		},
-		
+
 		/**
 		 * Update view if the model changes, helps keep two edit forms for the same model in sync
 		 * @returns {Boolean} Returns false to stop propagation
@@ -100,17 +111,17 @@ var FormView = Backbone.View.extend(
 			this.$el.find('.text').val(this.model.get('text'));
 			return false;
 		},
-		
+
 		/**
 		 * Override the default view remove method with custom actions
 		 */
 		remove: function () {
 			// unsubscribe from all model events with this context
 			this.model.off(null, null, this);
-			
+
 			// delete container form DOM
 			this.$el.remove();
-			
+
 			// call backbones default view remove method
 			Backbone.View.prototype.remove.call(this);
 		}
