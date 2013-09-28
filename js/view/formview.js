@@ -87,10 +87,11 @@ var FormView = Backbone.View.extend(
 		*/
 		cancel: function () {
 			// clean up form
+			// checks whether text has been entered
 			if (this.$el.find('.text').val() !== "") {
+				// if so, confirms cancellation should still take place
 				var c = confirm("Are you sure you want to lose these changes?")
 				if (c === true) {
-					debugger;
 					this.remove();
 				}
 				else {

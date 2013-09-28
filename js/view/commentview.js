@@ -19,13 +19,13 @@ var CommentView = Backbone.View.extend(
 		 * @type String
 		 */
 		tagName: 'li',
-	
+
 		/**
 		 * CSS class name of the container element
 		 * @type String
 		 */
 		className: 'comment',
-		
+
 		/**
 		 * The map of delegated event handlers
 		 * @type Object
@@ -35,7 +35,7 @@ var CommentView = Backbone.View.extend(
 			'click .delete': 'delete',
 			'click .reverse': 'reverse'
 		},
-		
+
 		/**
 		 * View init method, subscribing to model events
 		 */
@@ -43,7 +43,7 @@ var CommentView = Backbone.View.extend(
 			this.model.on('change', this.render, this);
 			this.model.on('destroy', this.remove, this);
 		},
-		
+
 		/**
 		 * Render the new comment DOM element from a template using Mustache
 		 * @returns {CommentView} Returns the view instance itself, to allow chaining view commands.
@@ -57,12 +57,12 @@ var CommentView = Backbone.View.extend(
 				author: this.model.get('author'),
 				text: this.model.get('text')
 			};
-			
+
 			// set the inner html of the container element to the Mustache rendered output
 			this.$el.html(Mustache.to_html(template, template_vars));
 			return this;
 		},
-		
+
 		/**
 		 * Edit button click handler
 		 * @returns {Boolean} Returns false to stop propagation
@@ -70,15 +70,15 @@ var CommentView = Backbone.View.extend(
 		edit: function () {
 			// create new FormView instance to edit the comment
 			var formview = new FormView({model: this.model});
-			
+
 			// insert FormView instance after the comment container
 			this.$el.after(formview.render().$el);
-			
+
 			// listen to save success event to handle successful form submit event
 			formview.on('success', this.handleEditSuccess, this);
 			return false;
 		},
-		
+
 		/**
 		 * Delete button click handler
 		 * @returns {Boolean} Returns false to stop propagation
@@ -92,7 +92,7 @@ var CommentView = Backbone.View.extend(
 			// automatically, no need to delete container form DOM
 			return false;
 		},
-		
+
 		/**
 		 * "Reverse" button click handler
 		 * @returns {Boolean} Returns false to stop propagation
@@ -102,7 +102,7 @@ var CommentView = Backbone.View.extend(
 			this.model.reverseText();
 			return false;
 		},
-		
+
 		/**
 		 * Handles form save success event
 		 * @params {CommentModel} model Model returned by successful comment "save" action
@@ -112,16 +112,16 @@ var CommentView = Backbone.View.extend(
 			var $notification = $('<div />')
 									.text('Comment by ' + model.get('author') + ' is saved.')
 									.addClass('notification');
-			
+
 			// append notification to edited comments container element
 			this.$el.append($notification);
-			
+
 			// remove notification after 5 seconds
 			setTimeout(function () {
 				$notification.remove();
 			}, 5000);
 		},
-		
+
 		/**
 		 * Override the default view remove method with custom actions
 		 */
