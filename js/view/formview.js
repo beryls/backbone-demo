@@ -32,6 +32,9 @@ var FormView = Backbone.View.extend(
 			'click .cancel': 'cancel'
 		},
 
+		// Will use this to determine whether a second form is being opened
+		// formOpen: false,
+
 		/**
 		 * View init method, subscribing to model events
 		 */
@@ -60,23 +63,29 @@ var FormView = Backbone.View.extend(
 		 * @returns {Boolean} Returns false to stop propagation
 		 */
 		submit: function () {
-			// set values from form on model
-			this.model.set({
-				author: this.$el.find('.author').val(),
-				text: this.$el.find('.text').val()
-			});
-
-			// set an id if model was a new instance
-			// note: this is usually done automatically when items are stored in an API
-			if (this.model.isNew()) {
-				this.model.id = Math.floor(Math.random() * 1000);
+			// Provides an error message if either author or text field is empty
+			if (this.$el.find('.author').val() === "" || this.$el.find('.text').val() === "") {
+				alert("Cannot submit a comment without both a name and text");
 			}
+			else {
+				// set values from form on model
+				this.model.set({
+					author: this.$el.find('.author').val(),
+					text: this.$el.find('.text').val()
+				});
 
-			// trigger the 'success' event on form, with the returned model as the only parameter
-			this.trigger('success', this.model);
+				// set an id if model was a new instance
+				// note: this is usually done automatically when items are stored in an API
+				if (this.model.isNew()) {
+					this.model.id = Math.floor(Math.random() * 1000);
+				}
 
-			// remove form view from DOM and memory
-			this.remove();
+				// trigger the 'success' event on form, with the returned model as the only parameter
+				this.trigger('success', this.model);
+
+				// remove form view from DOM and memory
+				this.remove();
+			}
 			return false;
 		},
 
@@ -87,8 +96,8 @@ var FormView = Backbone.View.extend(
 		*/
 		cancel: function () {
 			// clean up form
-			// checks whether text has been entered
-			if (this.$el.find('.text').val() !== "") {
+			// checks whether text has been changed
+			if (this.$el.find('.text').val() !== this.model.get('text') && !(this.$el.find('.text').val() === "" && this.model.get('text') === undefined)) {
 				// if so, confirms cancellation should still take place
 				var c = confirm("Are you sure you want to lose these changes?")
 				if (c === true) {
