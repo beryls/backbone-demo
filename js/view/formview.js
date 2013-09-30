@@ -82,6 +82,8 @@ var FormView = Backbone.View.extend(
 
 				// remove form view from DOM and memory
 				this.remove();
+				// hides overlay
+				$('#overlay').hide();
 			}
 			return false;
 		},
