@@ -98,13 +98,19 @@ var FormView = Backbone.View.extend(
 				// if so, confirms cancellation should still take place
 				var c = confirm("Are you sure you want to lose these changes?")
 				if (c === true) {
+					// removes form upon confirmation
 					this.remove();
+					// hides overlay
+					$('#overlay').hide();
 				}
 				else {
 				}
 			}
 			else {
+				// removes form without text
 				this.remove();
+				// hides overlay
+				$('#overlay').hide();
 			}
 			return false;
 		},

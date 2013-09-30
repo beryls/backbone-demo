@@ -46,6 +46,14 @@ var NewButtonView = Backbone.View.extend(
 				var formview = new FormView({model: comment});
 				this.$el.after(formview.render().$el);
 
+				// shows overlay when form is created
+				$('#overlay').show();
+
+				// triggers cancellation when overlay is clicked
+				$('#overlay').click(function(){
+					$('.commentform .cancel').trigger('click');
+				});
+
 				// add saved model to collection after form was submitted successfully
 				formview.on('success', this.handleFormSuccess, this);
 			}
