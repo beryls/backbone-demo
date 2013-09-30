@@ -32,9 +32,6 @@ var FormView = Backbone.View.extend(
 			'click .cancel': 'cancel'
 		},
 
-		// Will use this to determine whether a second form is being opened
-		// formOpen: false,
-
 		/**
 		 * View init method, subscribing to model events
 		 */

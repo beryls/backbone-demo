@@ -9,6 +9,19 @@ body {
 	padding: 25px;
 }
 
+#overlay {
+	display: none;
+	position: absolute;
+	background-color: black;
+	opacity: 0.5;
+	left: 0px;
+	top: 0px;
+	width:100%;
+	height:100%;
+	text-align:center;
+	z-index: 1;
+}
+
 .button {
 	display: inline-block;
 	background-color: yellow;
@@ -49,6 +62,7 @@ body {
 	padding: 15px;
 	margin: 5px 0px 5px 30px;
 	width: 400px;
+	z-index: 2;
 }
 
 .commentform textarea, .commentform input {
