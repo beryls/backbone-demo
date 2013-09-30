@@ -35,9 +35,13 @@ var FormView = Backbone.View.extend(
 		/**
 		 * View init method, subscribing to model events
 		 */
-		initialize: function () {
+		// added author_name parameter to initialize
+		initialize: function (author_name) {
 			this.model.on('change', this.updateFields, this);
 			this.model.on('destroy', this.remove, this);
+			// appends previously submitted author, if any, to options - will add to form when rendered
+			this.options = author_name;
+
 		},
 
 		/**
@@ -47,7 +51,8 @@ var FormView = Backbone.View.extend(
 		render: function () {
 			var template = $('#form-template').text();
 			var template_vars = {
-				author: this.model.get('author'),
+				// passes in previously submitted author to form
+				author: this.options.author,
 				text: this.model.get('text')
 			};
 			this.$el.html(Mustache.to_html(template, template_vars));
@@ -77,8 +82,8 @@ var FormView = Backbone.View.extend(
 					this.model.id = Math.floor(Math.random() * 1000);
 				}
 
-				// trigger the 'success' event on form, with the returned model as the only parameter
-				this.trigger('success', this.model);
+				// trigger the 'success' event on form, with the returned model and the author as parameters
+				this.trigger('success', this.model, this.$el.find('.author').val());
 
 				// remove form view from DOM and memory
 				this.remove();

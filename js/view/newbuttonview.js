@@ -17,6 +17,8 @@ var NewButtonView = Backbone.View.extend(
 			'click': 'createComment'
 		},
 
+		author: "",
+
 		/**
 		 * Initialize view, make sure button has a comment collection to work with
 		 */
@@ -43,7 +45,8 @@ var NewButtonView = Backbone.View.extend(
 			// checks if a FormView exists again, in case an existing instance was not removed
 			if ($('.commentform').length === 0) {
 				// render form view right after new button
-				var formview = new FormView({model: comment});
+				// pass in author - either most recently submitted, or blank if no submissions - as argument for FormView
+				var formview = new FormView({model: comment, author: this.author});
 				this.$el.after(formview.render().$el);
 
 				// shows overlay when form is created
@@ -66,8 +69,9 @@ var NewButtonView = Backbone.View.extend(
 		 * Method to handle FormView success event
 		 * @param {CommentModel} model Model data returned by FormViews save request
 		 */
-		handleFormSuccess: function (model) {
+		handleFormSuccess: function (model, author) {
 			this.collection.add(model);
+			this.author = author;
 		}
 
 	}

@@ -71,6 +71,9 @@ var CommentView = Backbone.View.extend(
 			// create new FormView instance to edit the comment
 			var formview = new FormView({model: this.model});
 
+			// shows overlay when form is created
+			$('#overlay').show();
+
 			// insert FormView instance after the comment container
 			this.$el.after(formview.render().$el);
 
