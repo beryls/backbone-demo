@@ -53,7 +53,7 @@ var NewButtonView = Backbone.View.extend(
 				$('#overlay').show();
 
 				// triggers cancellation when overlay is clicked
-				$('#overlay').click(function(){
+				$('#overlay').unbind('click').click(function(){
 					$('.commentform .cancel').trigger('click');
 				});
 
